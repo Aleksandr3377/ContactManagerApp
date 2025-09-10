@@ -44,8 +44,7 @@ public class ContactService(IContactRepository contactRepository, IMapper mapper
     {
         var errors = new List<string>();
         var toInsert = new List<Contact>();
-
-        // Конфиг CSV
+        
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = true,
