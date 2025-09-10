@@ -2,6 +2,7 @@ using ContactManagerAPI;
 using ContactManagerBLL;
 using ContactManagerDAL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddDbContext<ContactDbContext>(options =>
     options.UseInMemoryDatabase("ContactsDb"));
 
 builder.Services.AddAutoMapper(
-_ => {},
+_ => { },
 typeof(MappingProfile).Assembly,
 typeof(ApiMappingProfile).Assembly
 );
@@ -28,9 +29,13 @@ builder.Services.AddCors(options =>
 builder.Services.AddDalLayer();
 builder.Services.AddBllLayer();
 
-
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+    c.OperationFilter<FileUploadOperationFilter>();
+});
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -41,7 +46,8 @@ using (var scope = app.Services.CreateScope())
     SeedData.Initialize(db);
 }
 
-if (app.Environment.IsDevelopment()){
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 }

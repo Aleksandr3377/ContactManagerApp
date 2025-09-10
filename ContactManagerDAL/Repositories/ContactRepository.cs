@@ -18,6 +18,12 @@ public class ContactRepository(ContactDbContext context) : IContactRepository
         await context.SaveChangesAsync();
     }
 
+    public async Task AddRangeAsync(IEnumerable<Contact> contacts)
+    {
+        context.Contacts.AddRange(contacts);
+        await context.SaveChangesAsync();
+    }
+
     public async Task UpdateAsync(Contact contact)
     {
         context.Contacts.Update(contact);

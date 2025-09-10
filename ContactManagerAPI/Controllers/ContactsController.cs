@@ -3,6 +3,7 @@ using ContactManagerAPI.DTOs;
 using ContactManagerBLL.Interfaces;
 using ContactManagerBLL.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace ContactManagerAPI.Controllers;
 
@@ -22,6 +23,7 @@ public class ContactsController(IContactService contactService, IMapper mapper) 
     {
         var model = await contactService.GetByIdAsync(id);
         if (model is null) return NotFound();
+
         return Ok(mapper.Map<ContactDto>(model));
     }
 
@@ -41,6 +43,23 @@ public class ContactsController(IContactService contactService, IMapper mapper) 
         var model = mapper.Map<ContactModel>(dto);
         await contactService.UpdateAsync(model);
         return Ok();
+    }
+
+    [HttpPost("upload")]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<CsvImportResultDto>> UploadCsv([FromForm] FileUploadDto dto, CancellationToken ct)
+    {
+        if (dto.File == null || dto.File.Length == 0)
+            return BadRequest("CSV file is required.");
+
+        using var stream = dto.File.OpenReadStream();
+        var (imported, errors) = await contactService.ImportCsvAsync(stream, ct);
+
+        return Ok(new CsvImportResultDto
+        {
+            Imported = imported,
+            Errors = errors
+        });
     }
 
     [HttpDelete("{id}")]
