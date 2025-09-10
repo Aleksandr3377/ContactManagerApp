@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagerBLL", "Contac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagerAPI", "ContactManagerAPI\ContactManagerAPI.csproj", "{E621F2C7-8315-4B1E-A9CE-B8523874559B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagerTests", "ContactManagerTests\ContactManagerTests.csproj", "{091518CC-5F1D-434F-9841-2183CFEF708A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{E621F2C7-8315-4B1E-A9CE-B8523874559B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E621F2C7-8315-4B1E-A9CE-B8523874559B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E621F2C7-8315-4B1E-A9CE-B8523874559B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{091518CC-5F1D-434F-9841-2183CFEF708A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{091518CC-5F1D-434F-9841-2183CFEF708A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{091518CC-5F1D-434F-9841-2183CFEF708A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{091518CC-5F1D-434F-9841-2183CFEF708A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
