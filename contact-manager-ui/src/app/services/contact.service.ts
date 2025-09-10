@@ -11,6 +11,11 @@ export interface Contact {
   salary: number;
 }
 
+export interface CsvImportResult {
+  imported: number;
+  errors: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,5 +34,12 @@ export class ContactService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  uploadCsv(file: File): Observable<CsvImportResult> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<CsvImportResult>(`${this.apiUrl}/upload`, formData);
   }
 }

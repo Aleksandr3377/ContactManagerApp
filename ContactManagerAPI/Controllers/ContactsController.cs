@@ -50,17 +50,38 @@ public class ContactsController(IContactService contactService, IMapper mapper) 
     public async Task<ActionResult<CsvImportResultDto>> UploadCsv([FromForm] FileUploadDto dto, CancellationToken ct)
     {
         if (dto.File == null || dto.File.Length == 0)
-            return BadRequest("CSV file is required.");
+            return BadRequest("File is required.");
 
-        using var stream = dto.File.OpenReadStream();
-        var (imported, errors) = await contactService.ImportCsvAsync(stream, ct);
+        var ext = Path.GetExtension(dto.File.FileName).ToLowerInvariant();
+        
+        if (ext != ".csv" && ext != ".pdf")
+            return BadRequest("Only .csv or .pdf files are supported.");
 
-        return Ok(new CsvImportResultDto
+        if (ext == ".csv")
         {
-            Imported = imported,
-            Errors = errors
-        });
+            using var stream = dto.File.OpenReadStream();
+            var (imported, errors) = await contactService.ImportCsvAsync(stream, ct);
+
+            return Ok(new CsvImportResultDto
+            {
+                Imported = imported,
+                Errors = errors
+            });
+        }
+
+        if (ext == ".pdf")
+        {
+            return Ok(new
+            {
+                Message = "PDF uploaded successfully",
+                FileName = dto.File.FileName,
+                Size = dto.File.Length
+            });
+        }
+
+        return BadRequest("Unsupported file type.");
     }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)

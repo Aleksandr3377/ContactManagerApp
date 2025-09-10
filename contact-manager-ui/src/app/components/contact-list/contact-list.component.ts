@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Contact, ContactService } from '../../services/contact.service';
+import {Contact, ContactService, CsvImportResult} from '../../services/contact.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -19,6 +19,9 @@ export class ContactListComponent implements OnInit {
 
   editingId: number | null = null;
   editedContact: Contact | null = null;
+
+  selectedFile: File | null = null;
+  uploadResult: CsvImportResult | null = null;
 
   constructor(private contactService: ContactService) {}
 
@@ -96,5 +99,21 @@ export class ContactListComponent implements OnInit {
   getSortIcon(column: keyof Contact): string {
     if (this.sortColumn !== column) return '';
     return this.sortAsc ? '↑' : '↓';
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  uploadCsv() {
+    if (this.selectedFile) {
+      this.contactService.uploadCsv(this.selectedFile).subscribe(result => {
+        this.uploadResult = result;
+        this.loadContacts();
+      });
+    }
   }
 }

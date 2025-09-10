@@ -1,9 +1,24 @@
 <h2>Contacts</h2>
+
+
 <input
         type="text"
         placeholder="Search by name or phone"
         [(ngModel)]="filterText"
 />
+
+<div style="margin: 10px 0;">
+    <input type="file" (change)="onFileSelected($event)" accept=".csv,.pdf" />
+    <button (click)="uploadCsv()" [disabled]="!selectedFile">Upload CSV</button>
+</div>
+
+<div *ngIf="uploadResult">
+    <p>Imported: {{ uploadResult.imported }}</p>
+    <ul *ngIf="uploadResult.errors.length > 0">
+        <li *ngFor="let err of uploadResult.errors">{{ err }}</li>
+    </ul>
+</div>
+
 
 <table border="1" width="100%">
     <thead>
