@@ -1,0 +1,59 @@
+<h2>Contacts</h2>
+<input
+        type="text"
+        placeholder="Search by name or phone"
+        [(ngModel)]="filterText"
+/>
+
+<table border="1" width="100%">
+    <thead>
+    <tr>
+        <th (click)="sort('name')">Name {{ getSortIcon('name') }}</th>
+        <th (click)="sort('dateOfBirth')">Date of Birth {{ getSortIcon('dateOfBirth') }}</th>
+        <th (click)="sort('married')">Married {{ getSortIcon('married') }}</th>
+        <th (click)="sort('phone')">Phone {{ getSortIcon('phone') }}</th>
+        <th (click)="sort('salary')">Salary {{ getSortIcon('salary') }}</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let contact of filteredContacts">
+        <td *ngIf="editingId !== contact.id">{{ contact.name }}</td>
+        <td *ngIf="editingId === contact.id">
+            <input [(ngModel)]="editedContact!.name" />
+        </td>
+
+        <td *ngIf="editingId !== contact.id">{{ contact.dateOfBirth | date }}</td>
+        <td *ngIf="editingId === contact.id">
+            <input type="date" [(ngModel)]="editedContact!.dateOfBirth" />
+        </td>
+
+        <td *ngIf="editingId !== contact.id">{{ contact.married ? 'Yes' : 'No' }}</td>
+        <td *ngIf="editingId === contact.id">
+            <input type="checkbox" [(ngModel)]="editedContact!.married" />
+        </td>
+
+        <td *ngIf="editingId !== contact.id">{{ contact.phone }}</td>
+        <td *ngIf="editingId === contact.id">
+            <input [(ngModel)]="editedContact!.phone" />
+        </td>
+
+        <td *ngIf="editingId !== contact.id">{{ contact.salary | currency }}</td>
+        <td *ngIf="editingId === contact.id">
+            <input type="number" [(ngModel)]="editedContact!.salary" />
+        </td>
+
+        <td>
+            <ng-container *ngIf="editingId !== contact.id">
+                <button (click)="startEdit(contact)">Edit</button>
+                <button (click)="deleteContact(contact.id)">Delete</button>
+            </ng-container>
+
+            <ng-container *ngIf="editingId === contact.id">
+                <button (click)="saveEdit()">Save</button>
+                <button (click)="cancelEdit()">Cancel</button>
+            </ng-container>
+        </td>
+    </tr>
+    </tbody>
+</table>
